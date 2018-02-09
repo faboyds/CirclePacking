@@ -6,12 +6,13 @@ var img;
 var spots = [];
 
 function preload() {
-    img = loadImage('data/chess.png');
+    img = loadImage('data/go.png');
 }
 
 function setup() {
     img.loadPixels();
 
+    /*
     for(var x = 0; x < img.width; x++){
         for(var y = 0; y < img.height; y++){
             var index = x + (y * img.width);
@@ -22,14 +23,17 @@ function setup() {
             }
         }
     }
+    */
 
-    createCanvas(img.width, img.height);
+    canvasWidth = img.width;
+    canvasHeight = img.height;
+    createCanvas(canvasWidth, canvasHeight);
 }
 
 function draw() {
     background(0);
 
-    var total = 50;
+    var total = 20;
     var count = 0;
     var attempts = 0;
 
@@ -56,12 +60,13 @@ function draw() {
 
 function createCircle() {
 
-    var r = floor(random(0, spots.length));
+    //var r = floor(random(0, spots.length));
+    //var spot = spots[r];
+    //var x = spot.x;
+    //var y = spot.y;
 
-    var spot = spots[r];
-
-    var x = spot.x;
-    var y = spot.y;
+    var x = floor(random(canvasWidth));
+    var y = floor(random(canvasHeight));
 
     for(var i = 0; i < circles.length; i++) {
         var circle = circles[i];
@@ -73,20 +78,32 @@ function createCircle() {
         }
     }
 
-    circles.push(new Circle(x, y));
+
+    var index = x + (y * img.width);
+    var r = img.pixels[index*4];
+    var g = img.pixels[index*4 + 1];
+    var b = img.pixels[index*4 + 2];
+    var a = img.pixels[index*4 + 3];
+
+    circles.push(new Circle(x, y, r, g, b, a));
     return true;
 }
 
-function Circle(x, y) {
+function Circle(x, y, r, g, b, a) {
     this.x = x;
     this.y = y;
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
     this.radius = 1;
     this.growing = true;
 
     this.show = function(){
-        stroke(255);
-        strokeWeight(strokeW);
-        noFill();
+        //stroke(255);
+        //strokeWeight(strokeW);
+        //noFill();
+        fill(this.r, this.g, this.b, this.a);
         ellipse(this.x, this.y, this.radius*2, this.radius*2);
     };
 
